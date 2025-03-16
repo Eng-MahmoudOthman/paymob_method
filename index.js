@@ -100,12 +100,15 @@ let authToken = "";
 
 //& Express Middle Ware :
 app.use(cors());
+app.use(express.json()) ;
+
+
+
 // 3. استقبال Webhook عند نجاح الدفع
 app.post("/webhook", create_online_order);
 
 
 
-app.use(express.json()) ;
 
 
 
@@ -117,7 +120,6 @@ const getAuthToken = async () => {
           api_key: PAYMOB_API_KEY,
       });
       authToken = response.data.token;
-      console.log(authToken);
   } catch (error) {
       console.error("Error getting auth token:", error.response?.data || error.message);
   }
@@ -139,9 +141,7 @@ app.post("/create-payment", async (req, res) => {
           merchant_order_id: new Date().getTime(),
           items: [],
       });
-
       const orderId = orderResponse.data.id;
-      console.log(orderId);
       
       // طلب Payment Key
       const paymentKeyResponse = await axios.post("https://accept.paymob.com/api/acceptance/payment_keys", {
@@ -156,7 +156,7 @@ app.post("/create-payment", async (req, res) => {
               email: "test@example.com",
               country: "EG",
               city: "Cairo",
-              state: "N/A", // update cairo
+              state: "Cairo", 
               street: "123 Street",
               building: "1",
               apartment: "1",
@@ -166,8 +166,7 @@ app.post("/create-payment", async (req, res) => {
           integration_id: PAYMOB_INTEGRATION_ID,
       });
 
-      const paymentKey = paymentKeyResponse.data.token;
-
+      const paymentKey = paymentKeyResponse.data.token ;
       res.json({
           redirect_url: `https://accept.paymob.com/api/acceptance/iframes/865137?payment_token=${paymentKey}`,
       });
@@ -217,3 +216,6 @@ process.on("unhandledRejection" , (error)=>{
 // 12/25
 // 123
 
+
+
+// 1528857

@@ -190,9 +190,16 @@ app.get("/", async (req, res) => {
 });
 
 
+const startServer = () => {
+  try {
+    const server = app.listen(port, () => console.log(`Server is running ....`))
+  } catch (err) {
+    console.log(err)
+  }
+}
+startServer();
 
 
-app.listen(port, () => console.log(`Server is running ....`))
 
 
 //! Handle Error dbConnection And External Express => End the Code :

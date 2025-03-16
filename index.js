@@ -181,6 +181,17 @@ app.post("/create-payment", async (req, res) => {
 
 
 
+app.get("/", async (req, res) => {
+  try {
+    res.json({message:"Successfully"})
+  } catch (error) {
+    res.json({message:"Failed"})
+  }
+});
+
+
+
+
 app.listen(port, () => console.log(`Server is running ....`))
 
 

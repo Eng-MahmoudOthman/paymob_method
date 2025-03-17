@@ -7,6 +7,7 @@ import express from 'express'
 import cors from 'cors'
 import env from "dotenv"
 import { create_payment  , getSuccess , webhookMiddleWre } from './src/modules/paymob/paymob.controller.js';
+import { initApp } from './src/initApp.js';
 
 
 env.config()
@@ -44,6 +45,7 @@ app.post("/webhook", webhookMiddleWre);
 //& Specific Function Vercel : 
 const startServer = () => {
   try {
+   initApp(app)
     const server = app.listen(port, () => console.log(`Server is running ....`))
   } catch (err) {
     console.log(err)

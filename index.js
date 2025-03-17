@@ -98,14 +98,15 @@ let authToken = "";
 
 
 
-// //& Express Middle Ware :
-// app.use(cors());
-// app.use(express.json()) ;
-// app.post("/webhook", create_online_order);
 //& Express Middle Ware :
 app.use(cors());
-app.post("/webhook", express.raw({type:'application/json'}) , create_online_order);
 app.use(express.json()) ;
+
+
+
+
+app.post("/webhook", create_online_order);
+
 
 
 

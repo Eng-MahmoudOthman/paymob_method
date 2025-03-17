@@ -88,7 +88,7 @@ let authToken = "";
             console.log("order_url" , order.order_url);
             console.log(req.body.obj);
             
-         if (await success) {
+         if (success) {
             createOnlineOrder()
             console.log(`💰 Successfully Payment Message : ${data.message} ${amount_cents / 100} EGP`);
          } else {

@@ -6,7 +6,7 @@ process.on("uncaughtException" , (error)=>{
 import express from 'express'
 import cors from 'cors'
 import env from "dotenv"
-import { create_payment , createOnlineOrder , getSuccess } from './src/modules/paymob/paymob.controller.js';
+import { create_payment  , getSuccess , webhookMiddleWre } from './src/modules/paymob/paymob.controller.js';
 
 
 env.config()
@@ -32,21 +32,7 @@ app.post("/create-payment", create_payment);
 
 
 //& Receive Webhook From Paymob :
-app.post("/webhook", async(req , res , next)=>{
-   const {success , pending , amount_cents , data , order} = req.body.obj ;  // البيانات اللي جاية من PayMob
-      console.log("Done Webhook");
-      console.log("Success" , success);
-      console.log("Pending" , pending);
-      console.log("Amount_cents" , amount_cents);
-      console.log("order_url" , order.order_url);
-      console.log(req.body.obj);
-      
-   if (await success) {
-      createOnlineOrder(req.body.obj)
-   } else {
-      console.log(`❌ Failed Payment Message : ${data.message}`);
-   }
-});
+app.post("/webhook", webhookMiddleWre);
 
 
 

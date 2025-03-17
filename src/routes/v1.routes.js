@@ -6,5 +6,5 @@ import paymobRouter from "../modules/paymob/paymob.routes.js" ;
 
 
 const router = Router() ;
-   // router.use("/paymob" , paymobRouter) ;
+   router.use("/" , paymobRouter) ;
 export default router ;

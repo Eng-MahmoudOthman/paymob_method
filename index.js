@@ -27,7 +27,7 @@ app.use(express.json()) ;
 
 
 //& Create Payment Method :
-app.post("/create-payment", create_payment);
+// app.post("/create-payment", create_payment);
 
 
 
@@ -36,8 +36,8 @@ app.post("/webhook", webhookMiddleWre);
 
 
 
-//& End Point To Testing :
-app.get("/", getSuccess );
+// //& End Point To Testing :
+// app.get("/", getSuccess );
 
 
 

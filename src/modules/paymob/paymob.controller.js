@@ -100,6 +100,8 @@ export const create_online_order = catchError(
 
    const paymentData = req.body;  // البيانات اللي جاية من PayMob
    const {success , amount_cents} = req.query;  // البيانات اللي جاية من PayMob
+console.log(req.body);
+console.log(req.query);
 
    if (success) {
       console.log(`💰 Successfully Payment: ${amount_cents / 100} EGP`);
@@ -108,3 +110,11 @@ export const create_online_order = catchError(
    }
 }
 )
+
+
+
+
+
+
+
+// id=274849662&pending=false&amount_cents=150000&success=true&is_auth=false&is_capture=false&is_standalone_payment=true&is_voided=false&is_refunded=false&is_3d_secure=true&integration_id=4822951&profile_id=993047&has_parent_transaction=false&order=307781192&created_at=2025-03-17T12%3A54%3A36.718150&currency=EGP&merchant_commission=0&discount_details=%5B%5D&is_void=false&is_refund=false&error_occured=false&refunded_amount_cents=0&captured_amount=0&updated_at=2025-03-17T12%3A54%3A57.489850&is_settled=false&bill_balanced=false&is_bill=false&owner=1835600&merchant_order_id=1742208836457&data.message=Approved&source_data.type=card&source_data.pan=2346&source_data.sub_type=MasterCard&acq_response_code=00&txn_response_code=APPROVED&hmac=f2ae4dd58fb1cbc96da3c74467348df2f0d6e76553a2dfd795940abfba1553e53dbe6ac6c533d89abd525493bc55d76774e5fbbf8b9659cb35b6451161d50ff6

@@ -98,15 +98,16 @@ export const create_online_order = catchError(
       console.log("Done Webhook");
       
 
-   const paymentData = req.body.obj;  // البيانات اللي جاية من PayMob
-      console.log(req.body.obj);
+   const {success , pending , amount_cents} = req.body.obj;  // البيانات اللي جاية من PayMob
+      console.log("Success" , success);
+      console.log("Pending" , pending);
       
 
-   // if (paymentData.success) {
-   //    console.log(`💰 Successfully Payment: ${amount_cents / 100} EGP`);
-   // } else {
-   //    console.log(`❌ Failed Payment Ya Mahmoud`);
-   // }
+   if (success) {
+      console.log(`💰 Successfully Payment: ${amount_cents / 100} EGP`);
+   } else {
+      console.log(`❌ Failed Payment Ya Mahmoud`);
+   }
 }
 )
 

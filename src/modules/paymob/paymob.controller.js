@@ -101,6 +101,7 @@ export const create_online_order = catchError(
    const {success , pending , amount_cents} = req.body.obj;  // البيانات اللي جاية من PayMob
       console.log("Success" , success);
       console.log("Pending" , pending);
+      console.log(req.body.obj);
       
 
    if (success) {

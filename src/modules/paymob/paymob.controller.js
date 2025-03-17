@@ -99,13 +99,14 @@ export const create_online_order = catchError(
       
 
    const paymentData = req.body.obj;  // البيانات اللي جاية من PayMob
+      console.log(req.body.obj);
+      
 
-
-   if (paymentData.success) {
-      console.log(`💰 Successfully Payment: ${amount_cents / 100} EGP`);
-   } else {
-      console.log(`❌ Failed Payment Ya Mahmoud`);
-   }
+   // if (paymentData.success) {
+   //    console.log(`💰 Successfully Payment: ${amount_cents / 100} EGP`);
+   // } else {
+   //    console.log(`❌ Failed Payment Ya Mahmoud`);
+   // }
 }
 )
 

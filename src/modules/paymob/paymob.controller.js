@@ -102,9 +102,9 @@ export const create_online_order = catchError(
    console.log("Payment Callback Received:", paymentData);
 
    if (paymentData.success) {
-      console.log(`💰 دفع ناجح للمبلغ: ${paymentData.amount_cents / 100} EGP`);
+      console.log(`💰 Successfully Payment: ${paymentData.amount_cents / 100} EGP`);
    } else {
-      console.log(`❌ فشل الدفع، السبب: ${paymentData.error_message}`);
+      console.log(`❌ Failed Payment  : ${paymentData.error_message}`);
    }
       res.json({message:"Successfully"}) ; 
 }

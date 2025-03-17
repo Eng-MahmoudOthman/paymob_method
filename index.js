@@ -1,13 +1,12 @@
 //! Handle Error External Express => Start the Code :
 process.on("uncaughtException" , (error)=>{
-  console.log("Error" , error);
+   console.log("Error" , error);
 })
 
 import express from 'express'
 import cors from 'cors'
 import env from "dotenv"
 import { create_payment  , getSuccess , webhookMiddleWre } from './src/modules/paymob/paymob.controller.js';
-import { initApp } from './src/initApp.js';
 
 
 env.config()
@@ -27,8 +26,8 @@ app.use(express.json()) ;
 
 
 
-//& Create Payment Method :
-// app.post("/create-payment", create_payment);
+// & Create Payment Method :
+app.post("/create-payment", create_payment);
 
 
 
@@ -37,19 +36,18 @@ app.post("/webhook", webhookMiddleWre);
 
 
 
-// //& End Point To Testing :
-// app.get("/", getSuccess );
+//& End Point To Testing :
+app.get("/", getSuccess );
 
 
 
 //& Specific Function Vercel : 
 const startServer = () => {
-  try {
-   initApp(app)
-    const server = app.listen(port, () => console.log(`Server is running ....`))
-  } catch (err) {
-    console.log(err)
-  }
+   try {
+      const server = app.listen(port, () => console.log(`Server is running ....`))
+   } catch (err) {
+      console.log(err)
+   }
 }
 startServer();
 
@@ -60,7 +58,7 @@ startServer();
 
 //! Handle Error dbConnection And External Express => End the Code :
 process.on("unhandledRejection" , (error)=>{
-  console.log("Error" , error);
+   console.log("Error" , error);
 });
 
 

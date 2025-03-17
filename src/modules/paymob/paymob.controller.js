@@ -105,7 +105,6 @@ export const create_online_order = catchError(
       console.log(`💰 Successfully Payment: ${paymentData.amount_cents / 100} EGP`);
    } else {
       console.log(`❌ Failed Payment Ya Mahmoud`);
-      console.log(`❌ Failed Payment  Mahmoud`);
    }
       res.json({message:"Successfully"}) ; 
 }

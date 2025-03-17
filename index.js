@@ -186,7 +186,7 @@ app.post("/create-payment", async (req, res) => {
 
 app.get("/", async (req, res) => {
   try {
-    console.log("Successfully Ya Mahmoud");
+    console.log("Successfully Ya Mahmoud Othman");
     res.json({message:"Successfully"})
   } catch (error) {
     res.json({message:"Failed"})

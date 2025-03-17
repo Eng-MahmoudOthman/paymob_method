@@ -100,8 +100,12 @@ let authToken = "";
 
 //& Express Middle Ware :
 app.use(cors());
-app.post("/webhook", express.raw({type:'application/json'}),create_online_order);
 app.use(express.json()) ;
+app.post("/webhook", create_online_order);
+// //& Express Middle Ware :
+// app.use(cors());
+// app.post("/webhook", express.raw({type:'application/json'}) , create_online_order);
+// app.use(express.json()) ;
 
 
 
@@ -183,7 +187,6 @@ app.post("/create-payment", async (req, res) => {
 app.get("/", async (req, res) => {
   try {
     console.log("Successfully Ya Mahmoud");
-    
     res.json({message:"Successfully"})
   } catch (error) {
     res.json({message:"Failed"})

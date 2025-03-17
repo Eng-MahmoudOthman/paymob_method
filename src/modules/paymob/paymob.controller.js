@@ -11,90 +11,100 @@ let authToken = "";
 
 
 
-// 1. الحصول على التوكن من PayMob
-const getAuthToken = async () => {
-   try {
-      const response = await axios.post("https://accept.paymob.com/api/auth/tokens", {
-         api_key: PAYMOB_API_KEY,
-      });
-      authToken = response.data.token;
-   } catch (error) {
-      console.error("Error getting auth token:", error.response?.data || error.message);
+//& Create Token In Paymob :
+   const getAuthToken = async () => {
+      try {
+         const response = await axios.post("https://accept.paymob.com/api/auth/tokens", {
+            api_key: PAYMOB_API_KEY,
+         });
+         authToken = response.data.token;
+      } catch (error) {
+         console.error("Error getting auth token:", error.response?.data || error.message);
+      }
+   };
+
+
+
+//& Create Payment Method :
+   export const create_payment = async (req , res , next) => {
+      try {
+         await getAuthToken();
+
+         const { amount , phone } = req.body;
+
+         // تحويل المبلغ إلى قروش (100 جنيه = 10000 قرش)
+         const orderResponse = await axios.post("https://accept.paymob.com/api/ecommerce/orders", {
+            auth_token: authToken,
+            delivery_needed: "false",
+            amount_cents: amount * 100,
+            currency: "EGP",
+            merchant_order_id: new Date().getTime(),
+            items: [],
+         });
+         const orderId = orderResponse.data.id;
+         
+         // طلب Payment Key
+         const paymentKeyResponse = await axios.post("https://accept.paymob.com/api/acceptance/payment_keys", {
+            auth_token: authToken,
+            amount_cents: amount * 100,
+            expiration: 3600,
+            order_id: orderId,
+            billing_data: {
+               phone_number: phone,
+               first_name: "Test",
+               last_name: "User",
+               email: "test@example.com",
+               country: "EG",
+               city: "Cairo",
+               state: "Cairo", 
+               street: "123 Street",
+               building: "1",
+               apartment: "1",
+               floor: "1",
+            },
+            currency: "EGP",
+            integration_id: PAYMOB_INTEGRATION_ID,
+         });
+
+         const paymentKey = paymentKeyResponse.data.token ;
+         res.json({
+            redirect_url: `https://accept.paymob.com/api/acceptance/iframes/865137?payment_token=${paymentKey}`,
+         });
+
+      } catch (error) {
+         console.error("Error creating payment:", error.response?.data || error.message);
+         res.status(500).json({ error: "Payment creation failed" });
+      }
+   };
+
+
+//& Receive Webhook From Paymob :
+   export const webhook = catchError(
+      async(req , res , next)=>{
+      const {success , pending , amount_cents , data , order} = req.body.obj ;  // البيانات اللي جاية من PayMob
+         console.log("Done Webhook");
+         console.log("Success" , success);
+         console.log("Pending" , pending);
+         console.log("order_url" , order.order_url);
+         console.log(req.body.obj);
+         
+      if (success) {
+         console.log(`💰 Successfully Payment Message : ${data.message} ${amount_cents / 100} EGP`);
+      } else {
+         console.log(`❌ Failed Payment Message : ${data.message}`);
+      }
    }
-};
+   )
 
 
 
- // 2. إنشاء طلب دفع
-export const create_payment = async (req , res , next) => {
-   try {
-      await getAuthToken();
-
-      const { amount , phone } = req.body;
-
-      // تحويل المبلغ إلى قروش (100 جنيه = 10000 قرش)
-      const orderResponse = await axios.post("https://accept.paymob.com/api/ecommerce/orders", {
-         auth_token: authToken,
-         delivery_needed: "false",
-         amount_cents: amount * 100,
-         currency: "EGP",
-         merchant_order_id: new Date().getTime(),
-         items: [],
-      });
-      const orderId = orderResponse.data.id;
-      
-      // طلب Payment Key
-      const paymentKeyResponse = await axios.post("https://accept.paymob.com/api/acceptance/payment_keys", {
-         auth_token: authToken,
-         amount_cents: amount * 100,
-         expiration: 3600,
-         order_id: orderId,
-         billing_data: {
-            phone_number: phone,
-            first_name: "Test",
-            last_name: "User",
-            email: "test@example.com",
-            country: "EG",
-            city: "Cairo",
-            state: "Cairo", 
-            street: "123 Street",
-            building: "1",
-            apartment: "1",
-            floor: "1",
-         },
-         currency: "EGP",
-         integration_id: PAYMOB_INTEGRATION_ID,
-      });
-
-      const paymentKey = paymentKeyResponse.data.token ;
-      res.json({
-         redirect_url: `https://accept.paymob.com/api/acceptance/iframes/865137?payment_token=${paymentKey}`,
-      });
-
-   } catch (error) {
-      console.error("Error creating payment:", error.response?.data || error.message);
-      res.status(500).json({ error: "Payment creation failed" });
-   }
-};
-
-
- // 3. webhook :
-export const webhook = catchError(
-   async(req , res , next)=>{
-   const {success , pending , amount_cents , data , order} = req.body.obj ;  // البيانات اللي جاية من PayMob
-      console.log("Done Webhook");
-      console.log("Success" , success);
-      console.log("Pending" , pending);
-      console.log("order_url" , order.order_url);
-      console.log(req.body.obj);
-      
-   if (success) {
-      console.log(`💰 Successfully Payment Message : ${data.message} ${amount_cents / 100} EGP`);
-   } else {
-      console.log(`❌ Failed Payment Message : ${data.message}`);
-   }
-}
-)
+//& End Point To Testing :
+   export const getSuccess = catchError(
+      async(req , res , next)=>{
+         console.log("Successfully Ya Mahmoud Othman");
+         res.json({message:"Successfully Ya Mahmoud Othman"})
+      }
+   )
 
 
 

@@ -3,23 +3,15 @@ process.on("uncaughtException" , (error)=>{
   console.log("Error" , error);
 })
 
-
-
 import express from 'express'
 import cors from 'cors'
 import env from "dotenv"
-import { create_payment, webhook } from './src/modules/paymob/paymob.controller.js';
-// import axios from 'axios';
-// import { webhook } from './src/modules/paymob/paymob.controller.js';
+import { create_payment, getSuccess, webhook } from './src/modules/paymob/paymob.controller.js';
+
 
 env.config()
-
 const app = express()
 const port = process.env.PORT ||  5000 ;
-// const PAYMOB_API_KEY = process.env.PAYMOB_API_KEY;
-// const PAYMOB_INTEGRATION_ID = process.env.PAYMOB_INTEGRATION_ID;
-
-// let authToken = "";
 
 
 
@@ -34,97 +26,22 @@ app.use(express.json()) ;
 
 
 
-// 3. استقبال Webhook عند نجاح الدفع
-app.post("/webhook", webhook);
-
-
-
-
-
-// 2. إنشاء طلب دفع
+//& Create Payment Method :
 app.post("/create-payment", create_payment);
 
 
 
-
-// // 1. الحصول على التوكن من PayMob
-// const getAuthToken = async () => {
-//   try {
-//       const response = await axios.post("https://accept.paymob.com/api/auth/tokens", {
-//           api_key: PAYMOB_API_KEY,
-//       });
-//       authToken = response.data.token;
-//   } catch (error) {
-//       console.error("Error getting auth token:", error.response?.data || error.message);
-//   }
-// };
-
-
-// // 2. إنشاء طلب دفع
-// app.post("/create-payment", async (req, res) => {
-//   try {
-//       await getAuthToken();
-
-//       const { amount , phone } = req.body;
-
-//       // تحويل المبلغ إلى قروش (100 جنيه = 10000 قرش)
-//       const orderResponse = await axios.post("https://accept.paymob.com/api/ecommerce/orders", {
-//           auth_token: authToken,
-//           delivery_needed: "false",
-//           amount_cents: amount * 100,
-//           currency: "EGP",
-//           merchant_order_id: new Date().getTime(),
-//           items: [],
-//       });
-//       const orderId = orderResponse.data.id;
-      
-//       // طلب Payment Key
-//       const paymentKeyResponse = await axios.post("https://accept.paymob.com/api/acceptance/payment_keys", {
-//           auth_token: authToken,
-//           amount_cents: amount * 100,
-//           expiration: 3600,
-//           order_id: orderId,
-//           billing_data: {
-//               phone_number: phone,
-//               first_name: "Test",
-//               last_name: "User",
-//               email: "test@example.com",
-//               country: "EG",
-//               city: "Cairo",
-//               state: "Cairo", 
-//               street: "123 Street",
-//               building: "1",
-//               apartment: "1",
-//               floor: "1",
-//           },
-//           currency: "EGP",
-//           integration_id: PAYMOB_INTEGRATION_ID,
-//       });
-
-//       const paymentKey = paymentKeyResponse.data.token ;
-//       res.json({
-//           redirect_url: `https://accept.paymob.com/api/acceptance/iframes/865137?payment_token=${paymentKey}`,
-//       });
-
-//   } catch (error) {
-//       console.error("Error creating payment:", error.response?.data || error.message);
-//       res.status(500).json({ error: "Payment creation failed" });
-//   }
-// });
+//& Receive Webhook From Paymob :
+app.post("/webhook", webhook);
 
 
 
-
-app.get("/", async (req, res) => {
-  try {
-    console.log("Successfully Ya Mahmoud Othman");
-    res.json({message:"Successfully"})
-  } catch (error) {
-    res.json({message:"Failed"})
-  }
-});
+//& End Point To Testing :
+app.get("/", getSuccess );
 
 
+
+//& Specific Function Vercel : 
 const startServer = () => {
   try {
     const server = app.listen(port, () => console.log(`Server is running ....`))
@@ -133,6 +50,8 @@ const startServer = () => {
   }
 }
 startServer();
+
+
 
 
 
@@ -146,11 +65,17 @@ process.on("unhandledRejection" , (error)=>{
 
 
 
-// Mastercard:
+// Mastercard Approved :
 // 5123456789012346
-// Test Account Name
+// Test Account
 // 12/25
 // 123
 
 
+// URL Server On Vercel :
+// https://paymob-method.vercel.app/
 
+
+
+// Postman Documentation :
+// https://documenter.getpostman.com/view/29733612/2sAYkDLf9v
